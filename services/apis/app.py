@@ -52,6 +52,18 @@ def sort_todo_list():
         # Sort the todo list
         sorted_todo_list = sorted(todo_list_with_score, key=lambda x: x['score'], reverse=True)
 
+        i = 0
+        for s in sorted_todo_list:
+            task = s.get('item')
+            task.update({'priority': scores[i]})
+            i = i + 1
+            id = task.get('id')
+            todoist_update_url = 'http://todoist:5702/update-task'
+            http_requests.post(todoist_update_url, json = {
+                'id': id,
+                'task': task
+            })
+
     return jsonify({
         'sorted_todo_list': sorted_todo_list,
         'scores': scores

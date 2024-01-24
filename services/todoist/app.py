@@ -11,6 +11,17 @@ TODOIST_BASE_API_URL = 'https://api.todoist.com/rest/v2/'
 def root():
     return 'todoist service working'
 
+@app.route('/update-task', methods=['POST'])
+def update_todoist_task():
+    data = request.get_json()
+    id = data['id']
+    task = data['task']
+    todoist_task_url = str(TODOIST_BASE_API_URL) + 'tasks/' + str(id)
+    headers = {"Authorization": "Bearer " + str(TODOIST_API_KEY)}
+    http_requests.get(todoist_task_url, json=task, headers=headers)
+    return 'OK'
+
+
 # Fetch tasks from a todoist project
 def get_todoist_project_tasks(TODOIST_FROGNET_PROJECT_ID):
     todoist_tasks_url = str(TODOIST_BASE_API_URL) + 'tasks/'
