@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+    openai:
+        build: ./services/openai/
+        volumes:
+            - ./services/openai/:/usr/src/app/
+        ports:
+            - "5700:5700"
+        environment:
+            PORT: 5700
+            FLASK_DEBUG: 1
+        env_file:
+            - .env
