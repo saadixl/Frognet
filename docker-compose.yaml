@@ -11,9 +11,23 @@ services:
             FLASK_DEBUG: 1
         env_file:
             - .env
+    todoist:
+        depends_on:
+        - "openai"
+        build: ./services/todoist/
+        volumes:
+            - ./services/todoist/:/usr/src/app/
+        ports:
+            - "5702:5702"
+        environment:
+            PORT: 5702
+            FLASK_DEBUG: 1
+        env_file:
+            - .env
     apis:
         depends_on:
         - "openai"
+        - "todoist"
         build: ./services/apis/
         volumes:
             - ./services/apis/:/usr/src/app/
