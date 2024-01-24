@@ -32,7 +32,7 @@ def get_todoist_project_tasks(TODOIST_FROGNET_PROJECT_ID):
     else:
         return None
 
-@app.route('/get-todos', methods=['POST'])
+@app.route('/get-tasks', methods=['POST'])
 def get_todos():
     tasks = get_todoist_project_tasks(TODOIST_FROGNET_PROJECT_ID)
     return jsonify({'tasks': tasks})

@@ -12,7 +12,7 @@ def root():
 # Endpoint for sorting todo list
 @app.route('/sort-todo-list', methods=['POST'])
 def sort_todo_list():
-    todoist_url = 'http://todoist:5702/get-todos'
+    todoist_url = 'http://todoist:5702/get-tasks'
     todoist_response = http_requests.post(todoist_url)
     todoist_tasks = todoist_response.json().get('tasks')
 
