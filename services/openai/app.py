@@ -16,7 +16,7 @@ def score_texts():
     texts = data['texts']
     messages = [
         {'role': 'system', 'content': 'You are an AI language model trained to analyze and detect the priority of todo tasks.'},
-        {'role': 'user', 'content': f'Analyze the following array of tasks and score the task from 1 to 10. Return only the score in a list: {texts}'}
+        {'role': 'user', 'content': f'Analyze the following array of tasks and score the task from 1 to 10 while 10 is highest and 1 is lowest. Return only the score in a list: {texts}'}
     ]
 
     completion = openai.ChatCompletion.create(
