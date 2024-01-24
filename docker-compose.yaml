@@ -11,3 +11,14 @@ services:
             FLASK_DEBUG: 1
         env_file:
             - .env
+    apis:
+        depends_on:
+        - "openai"
+        build: ./services/apis/
+        volumes:
+            - ./services/apis/:/usr/src/app/
+        ports:
+            - "5701:5701"
+        environment:
+            PORT: 5701
+            FLASK_DEBUG: 1
