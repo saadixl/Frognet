@@ -15,6 +15,13 @@ def call_other_service(url, json={}):
     response = http_requests.post(url, json = json)
     return response
 
+# Method for updating todoist tasks
+def update_task(id, task):
+    call_other_service(todoist_update_url, {
+        'id': id,
+        'task': task
+    })
+
 # Endpoint for reseting task priorities
 @app.route('/reset-tasks', methods=['POST'])
 def reset_tasks():
@@ -26,10 +33,7 @@ def reset_tasks():
             task.update({
                 'priority': int(1)
             })
-            call_other_service(todoist_update_url, {
-                'id': id,
-                'task': task
-            })
+            update_task(id, task)
     return 'OK'
 
 # Endpoint for sorting todo list
@@ -62,10 +66,7 @@ def auto_prioritize_tasks():
             for task in todoist_tasks:
                 id = task.get('id')
                 task.update({'priority': int(scores[i])})
-                call_other_service(todoist_update_url, {
-                    'id': id,
-                    'task': task
-                })
+                update_task(id, task)
                 i = i + 1
 
     return jsonify({
