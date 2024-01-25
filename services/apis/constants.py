@@ -1,0 +1,1 @@
+todoist_get_task_url = 'http://todoist:5702/get-tasks'

@@ -2,6 +2,7 @@ import ast
 import os
 from flask import Flask, request, jsonify
 import requests as http_requests
+from constants import todoist_get_task_url
 
 app = Flask(__name__)
 
@@ -9,12 +10,13 @@ app = Flask(__name__)
 def root():
     return 'api service working'
 
+def call_todoist_service(url):
+    todoist_response = http_requests.post(url)
+    return todoist_response
 
 @app.route('/reset-tasks', methods=['POST'])
 def reset_tasks():
-    todoist_get_task_url = 'http://todoist:5702/get-tasks'
-    todoist_response = http_requests.post(todoist_get_task_url)
-    todoist_tasks = todoist_response.json().get('tasks')
+    todoist_tasks = call_todoist_service(todoist_get_task_url).json().get('tasks')
 
     if todoist_tasks is not None:
         for task in todoist_tasks:
@@ -30,20 +32,18 @@ def reset_tasks():
     return 'OK'
 
 # Endpoint for sorting todo list
-@app.route('/sort-todo-list', methods=['POST'])
-def sort_todo_list():
-    todoist_get_task_url = 'http://todoist:5702/get-tasks'
-    todoist_response = http_requests.post(todoist_get_task_url)
-    todoist_tasks = todoist_response.json().get('tasks')
+@app.route('/auto-prioritize-tasks', methods=['POST'])
+def auto_prioritize_tasks():
+    todoist_tasks = call_todoist_service(todoist_get_task_url).json().get('tasks')
 
     if todoist_tasks is not None:
-        todo_list = []
+        task_contents = []
         for task in todoist_tasks:
-            todo_list.append(task.get('content'))
+            task_contents.append(task.get('content'))
 
         # Calling the openai service to score the todo list texts
         url = 'http://openai:5700/score-texts'
-        json_payload = {'texts': todo_list}
+        json_payload = {'texts': task_contents}
         r = http_requests.post(url=url, json=json_payload)
 
         # Sending response
