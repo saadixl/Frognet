@@ -1,22 +1,23 @@
 import os
 import openai
 from flask import Flask, request, jsonify
+from constants import *
 
 app = Flask(__name__)
-OPEN_AI_API_KEY = os.environ.get('OPEN_AI_API_KEY')
 openai.api_key = OPEN_AI_API_KEY
 
 @app.route('/')
 def root():
     return 'openai service working'
 
+
 @app.route('/score-texts', methods=['POST'])
 def score_texts():
     data = request.get_json()
     texts = data['texts']
     messages = [
-        {'role': 'system', 'content': 'You are an AI language model trained to analyze and detect the priority of todo tasks.'},
-        {'role': 'user', 'content': f'Analyze the following array of tasks and score the task from 1 to 4 while 4 is highest and 1 is lowest. Return only the score in a list: {texts}'}
+        {'role': 'system', 'content': SYSTEM_PROMPT},
+        {'role': 'user', 'content': f'{USER_PROMPT} {texts}'}
     ]
 
     completion = openai.ChatCompletion.create(
@@ -30,6 +31,7 @@ def score_texts():
     scores = completion.choices[0].message.content
 
     return jsonify({'scores': scores})
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=os.getenv('PORT'))

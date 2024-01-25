@@ -1,11 +1,9 @@
 import os
 import requests as http_requests
 from flask import Flask, request, jsonify
+from constants import *
 
 app = Flask(__name__)
-TODOIST_API_KEY = os.environ.get('TODOIST_API_KEY')
-TODOIST_FROGNET_PROJECT_ID = os.environ.get('TODOIST_FROGNET_PROJECT_ID')
-TODOIST_BASE_API_URL = 'https://api.todoist.com/rest/v2/'
 
 @app.route('/')
 def root():

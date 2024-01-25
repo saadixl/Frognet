@@ -1,7 +1,7 @@
 import os
 from flask import Flask, jsonify
-from constants import todoist_get_task_url
-from helpers import call_other_service, get_scores_from_openai, update_task
+from constants import TODOIST_GET_TASK_URL
+from helpers import *
 
 app = Flask(__name__)
 
@@ -9,10 +9,11 @@ app = Flask(__name__)
 def root():
     return 'api service working'
 
+
 # Endpoint for reseting task priorities
 @app.route('/reset-tasks', methods=['POST'])
 def reset_tasks():
-    todoist_tasks = call_other_service(todoist_get_task_url).json().get('tasks')
+    todoist_tasks = call_other_service(TODOIST_GET_TASK_URL).json().get('tasks')
     if todoist_tasks is not None:
         for task in todoist_tasks:
             id = task.get('id')
@@ -23,11 +24,10 @@ def reset_tasks():
     return 'OK'
 
 
-
 # Endpoint for sorting todo list
 @app.route('/auto-prioritize-tasks', methods=['POST'])
 def auto_prioritize_tasks():
-    todoist_tasks = call_other_service(todoist_get_task_url).json().get('tasks')
+    todoist_tasks = call_other_service(TODOIST_GET_TASK_URL).json().get('tasks')
     if todoist_tasks is not None:
         task_contents = []
         for task in todoist_tasks:
@@ -47,6 +47,7 @@ def auto_prioritize_tasks():
     return jsonify({
         'scores': scores
     })
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=os.getenv('PORT'))

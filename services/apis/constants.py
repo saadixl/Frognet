@@ -1,3 +1,3 @@
-todoist_get_task_url = 'http://todoist:5702/get-tasks'
-todoist_update_url = 'http://todoist:5702/update-task'
-openai_score_text_url = 'http://openai:5700/score-texts'
+TODOIST_GET_TASK_URL = 'http://todoist:5702/get-tasks'
+TODOIST_UPDATE_TASK_URL = 'http://todoist:5702/update-task'
+OPENAI_SCORE_TEXT_URL = 'http://openai:5700/score-texts'

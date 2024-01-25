@@ -1,6 +1,6 @@
 import ast
 import requests as http_requests
-from constants import todoist_get_task_url, todoist_update_url, openai_score_text_url
+from constants import TODOIST_UPDATE_TASK_URL, OPENAI_SCORE_TEXT_URL
 
 # Method for calling other services
 def call_other_service(url, json={}):
@@ -9,7 +9,7 @@ def call_other_service(url, json={}):
 
 # Method for updating todoist tasks
 def update_task(id, task):
-    call_other_service(todoist_update_url, {
+    call_other_service(TODOIST_UPDATE_TASK_URL, {
         'id': id,
         'task': task
     })
@@ -17,7 +17,7 @@ def update_task(id, task):
 # Method for getting scores from openai
 def get_scores_from_openai(texts):
     # Calling the openai service to score the todo list texts
-    openai_response = call_other_service(openai_score_text_url, {'texts': texts})
+    openai_response = call_other_service(OPENAI_SCORE_TEXT_URL, {'texts': texts})
 
     # Sending response
     if openai_response.status_code == 200:
