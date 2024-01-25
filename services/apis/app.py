@@ -10,20 +10,15 @@ app = Flask(__name__)
 def root():
     return 'api service working'
 
-# Method for calling todoist service
-def call_todoist_service(url, json={}):
-    todoist_response = http_requests.post(url, json = json)
-    return todoist_response
-
-# Method for calling openai service
-def call_openai_service(url, json={}):
-    openai_response = http_requests.post(url, json = json)
-    return openai_response
+# Method for calling other services
+def call_other_service(url, json={}):
+    response = http_requests.post(url, json = json)
+    return response
 
 # Endpoint for reseting task priorities
 @app.route('/reset-tasks', methods=['POST'])
 def reset_tasks():
-    todoist_tasks = call_todoist_service(todoist_get_task_url).json().get('tasks')
+    todoist_tasks = call_other_service(todoist_get_task_url).json().get('tasks')
 
     if todoist_tasks is not None:
         for task in todoist_tasks:
@@ -31,7 +26,7 @@ def reset_tasks():
             task.update({
                 'priority': int(1)
             })
-            call_todoist_service(todoist_update_url, {
+            call_other_service(todoist_update_url, {
                 'id': id,
                 'task': task
             })
@@ -40,7 +35,7 @@ def reset_tasks():
 # Endpoint for sorting todo list
 @app.route('/auto-prioritize-tasks', methods=['POST'])
 def auto_prioritize_tasks():
-    todoist_tasks = call_todoist_service(todoist_get_task_url).json().get('tasks')
+    todoist_tasks = call_other_service(todoist_get_task_url).json().get('tasks')
 
     if todoist_tasks is not None:
         task_contents = []
@@ -48,7 +43,7 @@ def auto_prioritize_tasks():
             task_contents.append(task.get('content'))
 
         # Calling the openai service to score the todo list texts
-        openai_response = call_openai_service(openai_score_text_url, {'texts': task_contents})
+        openai_response = call_other_service(openai_score_text_url, {'texts': task_contents})
 
         # Sending response
         if openai_response.status_code == 200:
@@ -67,7 +62,7 @@ def auto_prioritize_tasks():
             for task in todoist_tasks:
                 id = task.get('id')
                 task.update({'priority': int(scores[i])})
-                call_todoist_service(todoist_update_url, {
+                call_other_service(todoist_update_url, {
                     'id': id,
                     'task': task
                 })
