@@ -9,11 +9,31 @@ app = Flask(__name__)
 def root():
     return 'api service working'
 
+
+@app.route('/reset-tasks', methods=['POST'])
+def reset_tasks():
+    todoist_get_task_url = 'http://todoist:5702/get-tasks'
+    todoist_response = http_requests.post(todoist_get_task_url)
+    todoist_tasks = todoist_response.json().get('tasks')
+
+    if todoist_tasks is not None:
+        for task in todoist_tasks:
+            id = task.get('id')
+            todoist_update_url = 'http://todoist:5702/update-task'
+            task.update({
+                'priority': int(1)
+            })
+            http_requests.post(todoist_update_url, json = {
+                'id': id,
+                'task': task
+            })
+    return 'OK'
+
 # Endpoint for sorting todo list
 @app.route('/sort-todo-list', methods=['POST'])
 def sort_todo_list():
-    todoist_url = 'http://todoist:5702/get-tasks'
-    todoist_response = http_requests.post(todoist_url)
+    todoist_get_task_url = 'http://todoist:5702/get-tasks'
+    todoist_response = http_requests.post(todoist_get_task_url)
     todoist_tasks = todoist_response.json().get('tasks')
 
     if todoist_tasks is not None:
