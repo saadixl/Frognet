@@ -18,7 +18,7 @@ def update_todoist_task():
     task = data['task']
     todoist_task_url = str(TODOIST_BASE_API_URL) + 'tasks/' + str(id)
     headers = {"Authorization": "Bearer " + str(TODOIST_API_KEY)}
-    http_requests.get(todoist_task_url, json=task, headers=headers)
+    http_requests.post(todoist_task_url, json=task, headers=headers)
     return 'OK'
 
 

@@ -39,39 +39,21 @@ def sort_todo_list():
             scores = None
 
         # Insert score with the todo list
-        todo_list_with_score = []
-        i = 0
+        updated_sorted_list = []
         if scores is not None:
-            for t in todo_list:
-                todo_list_with_score.append({
-                    'item': todoist_tasks[i],
-                    'score': scores[i]
+            i = 0
+            for task in todoist_tasks:
+                id = task.get('id')
+                todoist_update_url = 'http://todoist:5702/update-task'
+                task.update({
+                    'priority': int(scores[i])
+                })
+                updated_sorted_list.append(task)
+                http_requests.post(todoist_update_url, json = {
+                    'id': id,
+                    'task': task
                 })
                 i = i + 1
-
-        # Sort the todo list
-        sorted_todo_list = sorted(todo_list_with_score, key=lambda x: x['score'], reverse=True)
-
-        i = 0
-        updated_sorted_list = []
-        for s in sorted_todo_list:
-            task = s.get('item')
-            task.update({
-                'priority': s.get('score'),
-                'order': i + 1
-            })
-            id = task.get('id')
-            todoist_update_url = 'http://todoist:5702/update-task'
-            http_requests.post(todoist_update_url, json = {
-                'id': id,
-                'task': task
-            })
-            updated_sorted_list.append({
-                'score': s.get('score'),
-                'content': task.get('content'),
-                'priority': task.get('priority')
-            })
-            i = i + 1
 
     return jsonify({
         'updated_sorted_list': updated_sorted_list,
