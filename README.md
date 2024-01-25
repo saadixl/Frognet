@@ -6,4 +6,5 @@ If you search for a the phrase "Eat that frog" then Google will return you the f
 ## Demo
 Currently it works using postman.
 
-![demo](https://github.com/saadixl/Frognet/assets/1633940/5e4bac11-9986-4355-b900-fafbbfc5d9ad)
+![frognet-demo](https://github.com/saadixl/Frognet/assets/1633940/d40cf385-c36c-4e94-8122-f92bb0443731)
+
