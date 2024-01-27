@@ -1,5 +1,5 @@
 import os
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from constants import TODOIST_GET_TASK_URL
 from helpers import *
 
@@ -9,6 +9,10 @@ app = Flask(__name__)
 def root():
     return 'api service working'
 
+@app.route('/webhook', methods=['POST'])
+def webhook():
+    data = request.get_json()
+    return data
 
 # Endpoint for reseting task priorities
 @app.route('/reset-tasks', methods=['POST'])
