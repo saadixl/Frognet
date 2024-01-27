@@ -1,6 +1,6 @@
 import os
 from flask import Flask, jsonify, request
-from constants import TODOIST_GET_TASK_URL
+from constants import AUTO_PRIORITIZE_ENDPOINT, TODOIST_GET_TASK_URL
 from helpers import *
 
 app = Flask(__name__)
@@ -24,7 +24,7 @@ def reset_tasks():
 
 
 # Endpoint for sorting todo list
-@app.route('/auto-prioritize-tasks', methods=['POST'])
+@app.route('/' + AUTO_PRIORITIZE_ENDPOINT, methods=['POST'])
 def auto_prioritize_tasks():
     todoist_tasks = call_other_service(TODOIST_GET_TASK_URL).json().get('tasks')
     if todoist_tasks is not None:
