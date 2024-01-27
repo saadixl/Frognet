@@ -36,3 +36,5 @@ services:
         environment:
             PORT: 5701
             FLASK_DEBUG: 1
+        env_file:
+            - .env
