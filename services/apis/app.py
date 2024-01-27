@@ -1,6 +1,6 @@
 import os
 from flask import Flask, jsonify, request
-from constants import TODOIST_GET_TASK_URL, TODOIST_FROGNET_PROJECT_ID
+from constants import TODOIST_GET_TASK_URL
 from helpers import *
 
 app = Flask(__name__)
@@ -12,12 +12,7 @@ def root():
 @app.route('/webhook', methods=['POST'])
 def webhook():
     data = request.get_json()
-    event_name = data.get('event_name')
-    if event_name == 'item:added' or event_name == 'item:updated':
-        project_id = data.get('project_id')
-        if project_id == TODOIST_FROGNET_PROJECT_ID:
-            auto_prioritize_tasks()
-    return 'OK'
+    return data
 
 # Endpoint for reseting task priorities
 @app.route('/reset-tasks', methods=['POST'])
